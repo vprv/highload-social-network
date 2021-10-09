@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "npm --prefix ./server start"
+    "server": "npm --prefix ./server start",
+    "server:dev": "npm --prefix ./server run dev",
+    "server:install": "npm --prefix ./server install"
   },
   "repository": {
     "type": "git",

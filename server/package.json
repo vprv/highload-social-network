@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -- node_modules/ts-node/dist/bin -P tsconfig.json index.ts"
+    "start": "node -- node_modules/ts-node/dist/bin -P tsconfig.json index.ts",
+    "dev": "nodemon index.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
   }
 }
