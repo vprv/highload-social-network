@@ -17,6 +17,7 @@ services:
         volumes:
           - "./db/init.sql:/docker-entrypoint-initdb.d/init.sql"
           - db_data:/var/lib/mysql
+        command: --default-authentication-plugin=mysql_native_password
         environment:
           - SQL_INTERNAL_PORT=3306
           - MYSQL_ROOT_PASSWORD=mypass1234
