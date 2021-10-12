@@ -6,7 +6,9 @@
   "scripts": {
     "server": "npm --prefix ./server start",
     "server:dev": "npm --prefix ./server run dev",
-    "server:install": "npm --prefix ./server install"
+    "server:install": "npm --prefix ./server install",
+    "docker-compose": "docker-compose up -d --force-recreate --build",
+    "delete-volumes": "docker-compose down -v"
   },
   "repository": {
     "type": "git",
