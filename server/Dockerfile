@@ -9,6 +9,7 @@ WORKDIR /app
 
 COPY . /app
 
+RUN npm run client:install
 RUN npm run client:build
 RUN npm install
 

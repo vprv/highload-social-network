@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -- node_modules/ts-node/dist/bin -P tsconfig.json index.ts",
+    "client:install": "npm --prefix ./client install",
     "client:build": "npm --prefix ./client run build",
     "dev": "nodemon index.ts"
   },
