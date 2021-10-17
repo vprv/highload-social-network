@@ -6,12 +6,13 @@ export class Mysql {
         return new Promise((resolve, reject) => {
 
             const poolConfig = {
-                host: "localhost",
-                user: "root",
-                password: "mypass1234",
+                host: process.env.MYSQL_HOST || "localhost",
+                user: process.env.MYSQL_USER || "root",
+                password: process.env.MYSQL_PASSWORD || "mypass1234",
                 insecureAuth: true,
-                database: "sn"
+                database: process.env.MYSQL_DATABASE || "sn"
             }
+
             const pool = mysql.createPool(poolConfig)
 
             pool.getConnection((err: any, connection: any) => {
