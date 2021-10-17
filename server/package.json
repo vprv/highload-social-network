@@ -10,10 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   },
   "devDependencies": {
+    "@types/mysql": "^2.15.19",
     "nodemon": "^2.0.13"
   }
 }
