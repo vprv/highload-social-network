@@ -71,7 +71,7 @@ router.post(
             res.status(201).json({ message: 'User created' });
 
         } catch (e) {
-            res.status(500).json({ message: 'Registration failed. Something went wrong, try again later' })
+            res.status(500).json({ message: 'Registration failed. Something went wrong, try again later' });
         }
     })
 
@@ -112,10 +112,9 @@ router.post(
                 { accountId: account.id },
                 JWT_SECRET,
                 { expiresIn: '24h' }
-            )
-            res.json({ token, accountId: account.id })
+            );
 
-
+            res.json({ token, accountId: account.id });
         } catch (e) {
             res.status(500).json({ message: 'Login failed. Something went wrong, try again later' })
         }

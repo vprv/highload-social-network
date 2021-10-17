@@ -4,20 +4,20 @@ const jwt = require('jsonwebtoken')
 
 module.exports = (req: any, res: any, next: any) => {
     if (req.method === 'OPTIONS') {
-        return next()
+        return next();
     }
 
     try {
-        const token = req.headers.authorization.split(' ')[1]
+        const token = req.headers.authorization.split(' ')[1];
 
         if (!token) {
-            return res.status(401).json({ message: 'Authorization failed' })
+            return res.status(401).json({ message: 'Authorization failed' });
         }
-        const decoded = jwt.verify(token, JWT_SECRET)
-        req.user = decoded
-        next()
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.sourceAccountId = decoded.accountId;
+        next();
 
     } catch (e) {
-        res.status(401).json({ message: 'Authorization failed' })
+        res.status(401).json({ message: 'Authorization failed' });
     }
 }

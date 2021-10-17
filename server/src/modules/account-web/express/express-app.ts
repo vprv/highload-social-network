@@ -2,20 +2,19 @@ const express = require("express");
 const authRoutes = require("./routes/auth.routes");
 const accountRoutes = require("./routes/account.routes");
 const app = express();
-const PORT = 5000
 
 app.use(express.json({ extended: true }))
 
 app.use('/api/auth', authRoutes);
 app.use('/api/account', accountRoutes);
 
-app.get("/ping", (req: any, res: any) => {
+app.get("/", (req: any, res: any) => {
     res.json({ ping: "pong" })
 })
 
-export async function startExpress() {
+export async function startExpress(port: number) {
     try {
-        app.listen(PORT, () => console.log(`port is ${PORT}`))
+        app.listen(port, () => console.log(`Server http://localhost:5000/`));
     } catch (e: any) {
         console.log('Server Error', e.message)
         process.exit(1)

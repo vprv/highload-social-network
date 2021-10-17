@@ -1,9 +1,9 @@
-# Создание сплит теста
+###
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-   "email": "test6@test.com",
+   "email": "test1@test.com",
    "password": "password1",
     "name": "Vasiliy",
     "last_name": "Vasil'ev",
@@ -11,6 +11,15 @@ Content-Type: application/json
     "gender": true,
     "city": "New Yourk",
     "interests": "aljdflajsflkj"
+}
+
+###
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+   "email": "test1@test.com",
+   "password": "password1"
 }
 
 
@@ -31,3 +40,15 @@ GET http://localhost:5000/api/account/ping
 ####
 
 GET http://localhost:5000/api/account/test1@test.com
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiJ0ZXN0MUB0ZXN0LmNvbSIsImlhdCI6MTYzNDUwMzIyNiwiZXhwIjoxNjM0NTg5NjI2fQ.YuDWl8B4Q34zkb0YXpJHw2K7NiiaMzPZdwaKfQbn30c
+
+
+
+####
+POST http://localhost:5000/api/account/friend
+Content-Type: application/json
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiJ0ZXN0MUB0ZXN0LmNvbSIsImlhdCI6MTYzNDUwMzIyNiwiZXhwIjoxNjM0NTg5NjI2fQ.YuDWl8B4Q34zkb0YXpJHw2K7NiiaMzPZdwaKfQbn30c
+
+{
+    "target_account_id": "test2@test.com"
+}
