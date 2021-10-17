@@ -5,14 +5,19 @@ import { Mysql } from "../mysql/mysql";
 
 export class FriendMysqlEntity {
     constructor(
+        private _id: number | null,
         private _source_account_id: AccountId,
         private _target_account_id: AccountId,
         private _timestamp: Date
     ) { }
 
     static getInstance(): FriendMysqlEntity {
-        const friend = new FriendEntity("", "", new Date())
-        return new FriendMysqlEntity(friend.sourceAccountId, friend.targetAccountId, friend.timestamp)
+        const friend = new FriendEntity(null, "", "", new Date())
+        return new FriendMysqlEntity(friend.id, friend.sourceAccountId, friend.targetAccountId, friend.timestamp)
+    }
+
+    get id(): number | null {
+        return this._id;
     }
 
     get sourceAccountId(): AccountId {
@@ -36,15 +41,15 @@ export class FriendMysqlEntity {
         const result = await Mysql.executeQuery(sql);
         if (!Array.isArray(result) && result.length === 0) return [];
 
-        return result.map((row: any) => new FriendMysqlEntity(row.source_account_id, row.target_account_id, row.timestamp));
+        return result.map((row: any) => new FriendMysqlEntity(row.id, row.source_account_id, row.target_account_id, row.timestamp));
     }
 
     async save(): Promise<Boolean> {
         const sql = `
-            INSERT INTO friends (source_account_id,target_account_id,\`timestamp\`)
-            VALUES (?, ?, ?);
+            INSERT INTO friends (id,source_account_id,target_account_id,\`timestamp\`)
+            VALUES (?,?, ?, ?);
         `;
-        await Mysql.executeQuery(sql, [this._source_account_id, this._target_account_id, this._timestamp]);
+        await Mysql.executeQuery(sql, [this._id, this._source_account_id, this._target_account_id, this._timestamp]);
         return true;
     }
 }

@@ -21,7 +21,7 @@ export class AccountMysqlEntity {
         `;
 
         const result = await Mysql.executeQuery(sql);
-        if (!Array.isArray(result) && result.length === 0) return null;
+        if (!Array.isArray(result) || result.length === 0) return null;
 
         const { account_id, name, last_name, birthdate, gender, city, interests } = result[0];
         return new AccountMysqlEntity(account_id, name, last_name, birthdate, gender, city, interests);

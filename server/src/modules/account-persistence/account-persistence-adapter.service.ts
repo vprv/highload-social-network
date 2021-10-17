@@ -26,8 +26,15 @@ export class AccountPersistenceAdapterService implements LoadAccountPort, Update
     }
 
     async updateFriends(account: AccountEntity) {
-
-        return true;
+        try {
+            const friends = account.friendWindow.friends.filter(friend => friend.id === null);
+            const promises = friends.map(friend => AccountMapper.mapFriendToMysqlEntity(friend).save())
+            await Promise.all(promises);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+        return false;
     }
 
 }

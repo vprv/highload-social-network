@@ -54,6 +54,7 @@ export class AccountEntity {
 
     requestFriend(targetAccountId: AccountId): Boolean {
         const friend = new FriendEntity(
+            null,
             this._id,
             targetAccountId,
             new Date()

@@ -10,6 +10,7 @@ CREATE TABLE `accounts` (
 );
 
 CREATE TABLE `friends` (
+	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
 	`source_account_id` VARCHAR(255) NOT NULL,
 	`target_account_id` VARCHAR(255) NOT NULL,
 	`timestamp` TIMESTAMP NOT NULL

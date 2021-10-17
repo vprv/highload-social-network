@@ -14,6 +14,7 @@ export class AccountMapper {
 
         friendsMysqlEntity.forEach(friendMysql => {
             const friend = new FriendEntity(
+                friendMysql.id,
                 friendMysql.sourceAccountId,
                 friendMysql.targetAccountId,
                 friendMysql.timestamp
@@ -36,7 +37,7 @@ export class AccountMapper {
     }
 
     static mapFriendToMysqlEntity(friend: FriendEntity): FriendMysqlEntity {
-        return new FriendMysqlEntity(friend.sourceAccountId, friend.targetAccountId, friend.timestamp);
+        return new FriendMysqlEntity(friend.id, friend.sourceAccountId, friend.targetAccountId, friend.timestamp);
     }
 
     static mapAccountToMysqlEntity(account: AccountEntity): AccountMysqlEntity {
