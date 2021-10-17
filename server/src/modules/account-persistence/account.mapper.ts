@@ -22,10 +22,11 @@ export class AccountMapper {
             friendWindow.addFriend(friend);
         })
 
-        const { account_id, name, last_name, birthdate, gender, city, interests } = accountMysqlEntity
+        const { account_id, password, name, last_name, birthdate, gender, city, interests } = accountMysqlEntity
 
         return new AccountEntity(
             account_id,
+            password,
             name,
             last_name,
             birthdate,
@@ -41,10 +42,11 @@ export class AccountMapper {
     }
 
     static mapAccountToMysqlEntity(account: AccountEntity): AccountMysqlEntity {
-        const { id, name, lastName, birthday, city, interests } = account;
+        const { id, password, name, lastName, birthday, city, interests } = account;
         const gender = account.gender === "m" ? true : false;
         return new AccountMysqlEntity(
             id,
+            password,
             name,
             lastName,
             birthday,

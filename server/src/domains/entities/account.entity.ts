@@ -7,6 +7,7 @@ export type AccountId = string;
 export class AccountEntity {
     constructor(
         private readonly _id: AccountId,
+        private readonly _password: string,
         private readonly _name: string,
         private readonly _last_name: string,
         private readonly _birthday: Date,
@@ -18,6 +19,10 @@ export class AccountEntity {
 
     get id(): AccountId {
         return this._id;
+    }
+
+    get password(): string {
+        return this._password;
     }
 
     get name(): string {

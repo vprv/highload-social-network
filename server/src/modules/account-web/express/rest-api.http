@@ -1,0 +1,33 @@
+# Создание сплит теста
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+   "email": "test6@test.com",
+   "password": "password1",
+    "name": "Vasiliy",
+    "last_name": "Vasil'ev",
+    "birthdate": "1999-04-04",
+    "gender": true,
+    "city": "New Yourk",
+    "interests": "aljdflajsflkj"
+}
+
+
+####
+
+GET http://localhost:5000/api/auth/ping
+
+####
+
+GET http://localhost:5000/ping
+
+
+
+####
+
+GET http://localhost:5000/api/account/ping
+
+####
+
+GET http://localhost:5000/api/account/test1@test.com

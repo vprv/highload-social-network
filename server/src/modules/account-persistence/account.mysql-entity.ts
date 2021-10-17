@@ -3,6 +3,7 @@ import { Mysql } from "../mysql/mysql";
 export class AccountMysqlEntity {
     constructor(
         public account_id: string,
+        public password: string,
         public name: string,
         public last_name: string,
         public birthdate: Date,
@@ -12,7 +13,7 @@ export class AccountMysqlEntity {
     ) { }
 
     static getInstance(): AccountMysqlEntity {
-        return new AccountMysqlEntity("", "", "", new Date(), true, "", "");
+        return new AccountMysqlEntity("", "", "", "", new Date(), true, "", "");
     }
 
     async findOne(accountId: AccountId) {
@@ -23,18 +24,19 @@ export class AccountMysqlEntity {
         const result = await Mysql.executeQuery(sql);
         if (!Array.isArray(result) || result.length === 0) return null;
 
-        const { account_id, name, last_name, birthdate, gender, city, interests } = result[0];
-        return new AccountMysqlEntity(account_id, name, last_name, birthdate, gender, city, interests);
+        const { account_id, password, name, last_name, birthdate, gender, city, interests } = result[0];
+        return new AccountMysqlEntity(account_id, password, name, last_name, birthdate, gender, city, interests);
     }
 
     async save(): Promise<Boolean> {
 
         const sqlAccountInfo = `
-            INSERT INTO accounts (account_id,name,last_name,birthdate,gender,city,interests)
-            VALUES (?,?,?,?,?,?,?);
+            INSERT INTO accounts (account_id,password,name,last_name,birthdate,gender,city,interests)
+            VALUES (?,?,?,?,?,?,?,?);
         `;
         const dataAccountInfo = [
             this.account_id,
+            this.password,
             this.name,
             this.last_name,
             this.birthdate,
