@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -- node_modules/ts-node/dist/bin -P tsconfig.json index.ts",
+    "client:build": "npm --prefix ./client run build",
     "dev": "nodemon index.ts"
   },
   "author": "",
