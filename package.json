@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run docker-compose",
     "server": "npm --prefix ./server start",
     "server:dev": "npm --prefix ./server run dev",
     "server:install": "npm --prefix ./server install",
