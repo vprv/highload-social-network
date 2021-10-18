@@ -23,26 +23,11 @@ export const AccountScreen = () => {
 
   const accountId = email || userId;
 
+  const message = useMessage();
 
   const [inputValue, setInputValue] = useState('')
-  const [list, setList] = useState([])
   const [account, setAccount] = useState([])
 
-
-  const getList = useCallback(async () => {
-    try {
-      const data = await request(
-        '/api/task',
-        'GET',
-        null,
-        { Authorization: `Bearer ${token}` }
-      )
-      setList([...data])
-      autoInit()
-    } catch (e) {
-
-    }
-  }, [token, request, setList])
 
   const getAccount = useCallback(async (email) => {
     try {
@@ -55,7 +40,7 @@ export const AccountScreen = () => {
       setAccount(data)
       autoInit()
     } catch (e) {
-
+      message(JSON.stringify(e))
     }
   }, [token, request, setAccount])
 
@@ -83,90 +68,12 @@ export const AccountScreen = () => {
         { target_account_id: accountId },
         { Authorization: `Bearer ${auth.token}` }
       )
-
+      message(JSON.stringify(data));
     } catch (e) {
+      message(JSON.stringify(e));
     }
 
   }
-
-  const message = useMessage()
-
-  const importantButtonHandler = () => {
-    message("This button doesn't do anything. Like you right now")
-  }
-
-
-  const keyPressed = async (event) => {
-    if (event.key === 'Enter') {
-      if (inputValue) {
-        const text = inputValue
-        event.target.value = ''
-        setInputValue('')
-        try {
-          const data = await request(
-            '/api/task/add',
-            'POST',
-            { text: text },
-            { Authorization: `Bearer ${auth.token}` }
-          )
-
-
-          setList([...list, data.task])
-          autoInit()
-
-
-        } catch (e) {
-        }
-      }
-    }
-  }
-
-
-  const listItemClickHandler = event => {
-    event.preventDefault()
-  }
-
-  const makeDoneHandler = async (event, id) => {
-    event.preventDefault()
-
-    try {
-      const data = await request(
-        '/api/task/done',
-        'POST',
-        { _id: id },
-        { Authorization: `Bearer ${auth.token}` }
-      )
-      if (data.message == 'success') {
-        getList()
-      }
-    } catch (e) {
-    }
-
-  }
-
-  const listItemDeleteHandler = async (event, id) => {
-    event.preventDefault()
-    try {
-      const data = await request(
-        '/api/task/delete',
-        'POST',
-        { _id: id },
-        { Authorization: `Bearer ${auth.token}` }
-      )
-      if (data.message == 'success') {
-        getList()
-      }
-
-    } catch (e) {
-    }
-
-
-  }
-
-  const onChangeHandler = (event) => {
-    setInputValue(event.target.value)
-  }
-
 
   return (
     <div style={page}>
