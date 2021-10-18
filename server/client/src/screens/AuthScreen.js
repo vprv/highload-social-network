@@ -62,6 +62,13 @@ export const AuthScreen = () => {
               onClick={loginHandler}
             >Login</a>
           </div>
+          <div>
+            <a className="waves-effect waves-light btn"
+              style={button}
+              disabled={loading}
+              href="/registration"
+            >Registration</a>
+          </div>
         </div>
       </div>
     </div>

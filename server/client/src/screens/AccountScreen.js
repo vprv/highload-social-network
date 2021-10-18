@@ -26,6 +26,7 @@ export const AccountScreen = () => {
 
   const [inputValue, setInputValue] = useState('')
   const [list, setList] = useState([])
+  const [account, setAccount] = useState([])
 
 
   const getList = useCallback(async () => {
@@ -43,17 +44,49 @@ export const AccountScreen = () => {
     }
   }, [token, request, setList])
 
+  const getAccount = useCallback(async (email) => {
+    try {
+      const data = await request(
+        `/api/account/${email}`,
+        'GET',
+        null,
+        { Authorization: `Bearer ${token}` }
+      )
+      setAccount(data)
+      autoInit()
+    } catch (e) {
+
+    }
+  }, [token, request, setAccount])
+
+
 
   useEffect(() => {
 
-    getList()
-  }, [getList])
+    getAccount(accountId)
+  }, [getAccount])
 
 
   const logoutHandler = event => {
     event.preventDefault()
     auth.logout()
     history.push('/')
+  }
+
+  const addFriendHandler = async (event) => {
+    event.preventDefault()
+
+    try {
+      const data = await request(
+        '/api/account/friend',
+        'POST',
+        { target_account_id: accountId },
+        { Authorization: `Bearer ${auth.token}` }
+      )
+
+    } catch (e) {
+    }
+
   }
 
   const message = useMessage()
@@ -142,6 +175,11 @@ export const AccountScreen = () => {
           <h3 style={{ margin: 0 }}>
             {accountId}
           </h3>
+          {
+            accountId != userId
+              ? <a href="#" className="waves-effect waves-light btn" onClick={addFriendHandler}> Добавить в друзья</a>
+              : null
+          }
 
           <a className="waves-effect waves-light btn"
             href="/"
@@ -150,59 +188,30 @@ export const AccountScreen = () => {
         </div>
         <div style={container}>
 
-          <input type="text" name="inputTodo" autoFocus={true}
-            onChange={onChangeHandler} onKeyPress={keyPressed}
-            placeholder="just do it"
-            style={{ textAlign: 'center' }} />
-
-
-          <a onClick={importantButtonHandler} className="waves-effect waves-light btn red">
-            very important button
-          </a>
-          <div className={"collection"} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-            {
-              [...list].reverse().map((item, index) => {
-                return (
-                  <div name={item._id} style={listItemStyle} key={index}>
-
-
-                    <a onClick={(e) => {
-                      e.preventDefault()
-                    }}
-                      className={`collection-item modal-trigger ${item.done ? 'active' : ''}`}
-                      data-target={!item.done ? `modal${index}` : null}
-                      style={{ flex: 1 }}>{item.text}</a>
-
-
-                    {!item.done ? <a onClick={e => {
-                      listItemDeleteHandler(e, item._id)
-                    }}
-                      className={"collection-item"}>
-                      <i className="small material-icons">delete</i>
-                    </a>
-                      : null
-                    }
-
-
-                    <div id={`modal${index}`} className="modal">
-                      <div className="modal-content">
-                        <h4>{item.text}</h4>
-                        <p>Are you really have done it? You will not able to cancel it.</p>
-                      </div>
-                      <div className="modal-footer">
-                        <a onClick={e => {
-                          makeDoneHandler(e, item._id)
-                        }} className="modal-close waves-effect waves-green btn-flat">Agree</a>
-                      </div>
-                    </div>
-
-
-                  </div>
-                )
-              })
-            }
+          <div>
+            <div>Имя: {account._name}</div>
+            <div>Фамилия: {account._last_name}</div>
+            <div>Возраст: {account._age}</div>
+            <div>Пол: {account._gender}</div>
+            <div>Город: {account._city}</div>
+            <div>Интересы: {account._interests}</div>
           </div>
 
+        </div>
+        <div style={container}>
+          <div>Друзья</div>
+          <ul>
+            {account._friends
+              ? account?._friends.map((email, index) => {
+                return (
+                  <li name={email} style={listItemStyle} key={index}>
+                    <a href={"/account/" + email}>{email}</a>
+                  </li>
+                );
+              })
+              : null
+            }
+          </ul>
         </div>
       </div>
     </div>
