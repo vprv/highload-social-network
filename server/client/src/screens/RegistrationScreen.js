@@ -84,13 +84,18 @@ export const RegistrationScreen = () => {
                             placeholder={'Дата рождения'}
                             onChange={changeHandler}
                         />
-                        <label for="gender">Мужской пол?</label>
-                        <input type="checkbox"
-                            name={'gender'}
-                            id={'gender'}
-                            placeholder={'Пол'}
-                            onChange={changeHandler}
-                        />
+
+                        <div>
+                            <label>
+                                <input type="checkbox"
+                                    name={'gender'}
+                                    id={'gender'}
+                                    onChange={changeHandler}
+                                />
+                                <span>Мужской пол?</span>
+                            </label>
+                        </div>
+
                         <input type="text"
                             name={'city'}
                             id={'city'}

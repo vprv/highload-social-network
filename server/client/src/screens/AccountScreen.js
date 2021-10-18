@@ -1,8 +1,8 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
-import {useMessage} from "../hooks/message.hook"
-import {AuthContext} from '../context/AuthContext'
-import {useHttp} from "../hooks/http.hook"
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { useMessage } from "../hooks/message.hook"
+import { AuthContext } from '../context/AuthContext'
+import { useHttp } from "../hooks/http.hook"
 
 import M from 'materialize-css'
 
@@ -12,13 +12,16 @@ export const AccountScreen = () => {
     await M.AutoInit()
   }
 
-  const {request} = useHttp()
+  const { request } = useHttp()
 
+  let { email } = useParams();
 
-  const {header, container, page, wrapper, listItemStyle} = style
+  const { header, container, page, wrapper, listItemStyle } = style
   const history = useHistory()
   const auth = useContext(AuthContext)
-  const {token} = useContext(AuthContext)
+  const { token, userId } = useContext(AuthContext)
+
+  const accountId = email || userId;
 
 
   const [inputValue, setInputValue] = useState('')
@@ -31,7 +34,7 @@ export const AccountScreen = () => {
         '/api/task',
         'GET',
         null,
-        {Authorization: `Bearer ${token}`}
+        { Authorization: `Bearer ${token}` }
       )
       setList([...data])
       autoInit()
@@ -70,8 +73,8 @@ export const AccountScreen = () => {
           const data = await request(
             '/api/task/add',
             'POST',
-            {text: text},
-            {Authorization: `Bearer ${auth.token}`}
+            { text: text },
+            { Authorization: `Bearer ${auth.token}` }
           )
 
 
@@ -97,8 +100,8 @@ export const AccountScreen = () => {
       const data = await request(
         '/api/task/done',
         'POST',
-        {_id: id},
-        {Authorization: `Bearer ${auth.token}`}
+        { _id: id },
+        { Authorization: `Bearer ${auth.token}` }
       )
       if (data.message == 'success') {
         getList()
@@ -114,8 +117,8 @@ export const AccountScreen = () => {
       const data = await request(
         '/api/task/delete',
         'POST',
-        {_id: id},
-        {Authorization: `Bearer ${auth.token}`}
+        { _id: id },
+        { Authorization: `Bearer ${auth.token}` }
       )
       if (data.message == 'success') {
         getList()
@@ -136,27 +139,27 @@ export const AccountScreen = () => {
     <div style={page}>
       <div style={wrapper}>
         <div style={header}>
-          <h3 style={{margin: 0}}>
-            justdoit
+          <h3 style={{ margin: 0 }}>
+            {accountId}
           </h3>
 
           <a className="waves-effect waves-light btn"
-             href="/"
-             onClick={logoutHandler}
+            href="/"
+            onClick={logoutHandler}
           >Logout</a>
         </div>
         <div style={container}>
 
           <input type="text" name="inputTodo" autoFocus={true}
-                 onChange={onChangeHandler} onKeyPress={keyPressed}
-                 placeholder="just do it"
-                 style={{textAlign: 'center'}}/>
+            onChange={onChangeHandler} onKeyPress={keyPressed}
+            placeholder="just do it"
+            style={{ textAlign: 'center' }} />
 
 
           <a onClick={importantButtonHandler} className="waves-effect waves-light btn red">
             very important button
           </a>
-          <div className={"collection"} style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
+          <div className={"collection"} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
             {
               [...list].reverse().map((item, index) => {
                 return (
@@ -166,17 +169,17 @@ export const AccountScreen = () => {
                     <a onClick={(e) => {
                       e.preventDefault()
                     }}
-                       className={`collection-item modal-trigger ${item.done ? 'active' : ''}`}
-                       data-target={!item.done ? `modal${index}` : null}
-                       style={{flex: 1}}>{item.text}</a>
+                      className={`collection-item modal-trigger ${item.done ? 'active' : ''}`}
+                      data-target={!item.done ? `modal${index}` : null}
+                      style={{ flex: 1 }}>{item.text}</a>
 
 
                     {!item.done ? <a onClick={e => {
-                        listItemDeleteHandler(e, item._id)
-                      }}
-                                     className={"collection-item"}>
-                        <i className="small material-icons">delete</i>
-                      </a>
+                      listItemDeleteHandler(e, item._id)
+                    }}
+                      className={"collection-item"}>
+                      <i className="small material-icons">delete</i>
+                    </a>
                       : null
                     }
 
@@ -208,13 +211,13 @@ export const AccountScreen = () => {
 
 const style = {
   page:
-    {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: 'auto',
-      maxWidth: 800,
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: 'auto',
+    maxWidth: 800,
 
-    },
+  },
   wrapper: {
     display: 'flex',
     flexDirection: 'column',

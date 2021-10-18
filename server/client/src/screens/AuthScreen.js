@@ -28,7 +28,7 @@ export const AuthScreen = () => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form })
-      auth.login(data.token, data.userId)
+      auth.login(data.token, data.accountId)
     } catch (e) {
     }
   }
@@ -38,7 +38,7 @@ export const AuthScreen = () => {
     <div style={page}>
       <div style={wrapper}>
         <div style={header}>
-          <h3 style={{ margin: 0 }}>justdoit</h3>
+          <h3 style={{ margin: 0 }}>Социальная сеть</h3>
         </div>
         <div style={container}>
           <div className={"input-field"}>
