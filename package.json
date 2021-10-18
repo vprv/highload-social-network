@@ -8,6 +8,8 @@
     "server": "npm --prefix ./server start",
     "server:dev": "npm --prefix ./server run dev",
     "server:install": "npm --prefix ./server install",
+    "client:install": "npm --prefix ./server/client install",
+    "client:dev": "npm --prefix ./server/client start",
     "docker-compose": "docker-compose up -d --force-recreate --build",
     "delete-volumes": "docker-compose down -v",
     "clear-start": "concurrently \"npm run delete-volumes\" \"npm run docker-compose\""

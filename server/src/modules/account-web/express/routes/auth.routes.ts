@@ -70,8 +70,11 @@ router.post(
             await createAccountService.createAccount(new CreateAccountCommand(account));
             res.status(201).json({ message: 'User created' });
 
-        } catch (e) {
-            res.status(500).json({ message: 'Registration failed. Something went wrong, try again later' });
+        } catch (error) {
+            res.status(500).json({
+                message: 'Registration failed. Something went wrong, try again later',
+                error
+            });
         }
     })
 
