@@ -17,17 +17,29 @@ router.get("/ping", async (req: any, res: any) => {
 });
 
 router.get("/:email", authMiddleware, async (req: any, res: any) => {
-    const { email } = req.params;
-    const accountPersistenceAdapterService = new AccountPersistenceAdapterService(
-        AccountMysqlEntity.getInstance(),
-        FriendMysqlEntity.getInstance()
-    );
+    try {
+        const { email } = req.params;
+        const accountPersistenceAdapterService = new AccountPersistenceAdapterService(
+            AccountMysqlEntity.getInstance(),
+            FriendMysqlEntity.getInstance()
+        );
 
-    const account = await new GetAccountService(accountPersistenceAdapterService).getAccount(email);
+        const account = await new GetAccountService(accountPersistenceAdapterService).getAccount(email);
 
-    const responseObj: any = { ...account };
-    delete responseObj._password;
-    res.json(responseObj);
+        const responseObj: any = { ...account };
+        delete responseObj._password;
+        delete responseObj._birthday;
+        delete responseObj._friendWindow;
+        responseObj._age = account.age;
+        responseObj._gender = account.gender ? "male" : "female";
+        const friendsList = account.friendWindow.friends
+            .map(friend => account.id === friend.sourceAccountId ? friend.targetAccountId : friend.sourceAccountId)
+        responseObj._friends = [...new Set(friendsList)];
+
+        res.json(responseObj);
+    } catch (error) {
+        res.status(404).json({ message: "Not found or another error", error })
+    }
 });
 
 router.post("/friend", authMiddleware, async (req: any, res: any) => {
@@ -53,7 +65,9 @@ router.post("/friend", authMiddleware, async (req: any, res: any) => {
         const command = new AddFriendCommand(friend);
         const service = new AddFriendService(accountPersistenceAdapterService, accountPersistenceAdapterService);
         const result = await service.addFriend(command);
-        res.status(201).json({ message: 'Friend added' });
+        result
+            ? res.status(201).json({ message: 'Friend added' })
+            : res.status(500).json({ message: "Account doesn't exist" })
     }
     catch (e) {
         res.status(500).json({ message: 'Something went wrong, try again later' });
