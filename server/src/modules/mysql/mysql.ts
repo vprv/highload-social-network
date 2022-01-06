@@ -2,6 +2,7 @@
 import mysql from "mysql"
 
 export class Mysql {
+    static pool: any;
     static executeQuery(sql: string, data: Object | Array<Object> | null = null): Promise<any> {
         return new Promise((resolve, reject) => {
 
@@ -10,10 +11,13 @@ export class Mysql {
                 user: process.env.MYSQL_USER || "root",
                 password: process.env.MYSQL_PASSWORD || "mypass1234",
                 insecureAuth: true,
-                database: process.env.MYSQL_DATABASE || "sn"
+                database: process.env.MYSQL_DATABASE || "sn",
+                connectionLimit: 10
             }
-
-            const pool = mysql.createPool(poolConfig)
+            if (!Mysql.pool) {
+                Mysql.pool = mysql.createPool(poolConfig);
+            }
+            const pool = Mysql.pool;
 
             pool.getConnection((err: any, connection: any) => {
                 if (err) return reject(err);
