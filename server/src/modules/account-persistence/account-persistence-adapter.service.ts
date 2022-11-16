@@ -20,6 +20,12 @@ export class AccountPersistenceAdapterService implements LoadAccountPort, Update
         return AccountMapper.mapToDomain(accountInfo, friends)
     }
 
+    async findPerson(name: string, last_name: string): Promise<AccountEntity[]> {
+        const persons = await this._accountRepositoty.findPerson(name, last_name);
+        const accountEntities = persons.map(person => AccountMapper.mapToDomain(person, []));
+        return accountEntities;
+    }
+
     async createAccount(account: AccountEntity) {
         const status = await AccountMapper.mapAccountToMysqlEntity(account).save();
         return status;

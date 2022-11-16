@@ -28,6 +28,25 @@ export class AccountMysqlEntity {
         return new AccountMysqlEntity(account_id, password, name, last_name, birthdate, gender, city, interests);
     }
 
+    async findPerson(name: string, last_name: string): Promise<AccountMysqlEntity[]> {
+        const sql = `
+            SELECT * from accounts
+            WHERE name LIKE '${name}' AND last_name LIKE '${last_name}'
+            ORDER BY account_id
+        `;
+
+        const result = await Mysql.executeQuery(sql);
+        if (!Array.isArray(result) || result.length === 0) return [];
+
+        const entities = result.map(row => {
+            const { account_id, password, name, last_name, birthdate, gender, city, interests } = row;
+            return new AccountMysqlEntity(account_id, password, name, last_name, birthdate, gender, city, interests);
+        });
+
+        return entities;
+    }
+
+
     async save(): Promise<Boolean> {
 
         const sqlAccountInfo = `

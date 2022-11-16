@@ -7,6 +7,7 @@ import { GetAccountService } from "../../../../domains/services/get-account.serv
 import { FriendEntity } from "../../../../domains/entities/friend.entity";
 import { AddFriendCommand } from "../../../../domains/ports/in/add-friend.command";
 import { AddFriendService } from "../../../../domains/services/add-friend.service";
+import { FindPersonService } from "../../../../domains/services/find-person.service";
 
 const authMiddleware = require("../middleware/auth.middleware");
 
@@ -15,6 +16,41 @@ const router = new Router();
 router.get("/ping", async (req: any, res: any) => {
     res.json({ ping: "pong" });
 });
+
+
+router.get("/find", authMiddleware, async (req: any, res: any) => {
+    try {
+        const { name, last_name } = req.query;
+        if (!name || !last_name) {
+            res.status(500).json({ message: 'Invalid name or last_name' });
+        }
+
+        const accountPersistenceAdapterService = new AccountPersistenceAdapterService(
+            AccountMysqlEntity.getInstance(),
+            FriendMysqlEntity.getInstance()
+        );
+        const accounts = await new FindPersonService(accountPersistenceAdapterService).findPerson(name, last_name);
+        const filtered = accounts.map(account => {
+            const responseObj: any = { ...account };
+            delete responseObj._password;
+            delete responseObj._birthday;
+            delete responseObj._friendWindow;
+            responseObj._age = account.age;
+            responseObj._gender = account.gender ? "male" : "female";
+            const friendsList = account.friendWindow.friends
+                .map(friend => account.id === friend.sourceAccountId ? friend.targetAccountId : friend.sourceAccountId)
+            responseObj._friends = [...new Set(friendsList)];
+            return responseObj;
+        })
+
+        return res.json(filtered);
+
+    }
+    catch (error) {
+        return res.status(404).json({ message: "Not found or another error", error });
+    }
+});
+
 
 router.get("/:email", authMiddleware, async (req: any, res: any) => {
     try {
